@@ -1,7 +1,17 @@
 package main
 
-import "fmt"
+import "github.com/techygrrrl/timerrr/main/cli/cmd"
 
 func main() {
-	fmt.Println("Hello, world!")
+	cmd.Execute()
+	//fmt.Println("Hello, worrrld!")
+	//
+	//defaultTimer := models.DefaultTimer()
+	//program := tea.NewProgram(defaultTimer)
+	//
+	//_, err := program.Run()
+	//if err != nil {
+	//	fmt.Printf("There has been error: %v", err)
+	//	os.Exit(1)
+	//}
 }

@@ -8,6 +8,7 @@
 ## Requirements
 
 - `go 1.20`
+- [cobra-cli](https://github.com/spf13/cobra#usage)
 
 ## Development
 
