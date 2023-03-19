@@ -36,7 +36,7 @@ type TimerModel struct {
 	altScreen       bool // Full screen
 	quitting        bool
 	interrupting    bool
-	// endMessage string // The message to display and say at the end of the timer
+	// TODO: Customize colour?
 	// colour string // Hex representation of the timer
 }
 
@@ -44,12 +44,7 @@ func (m TimerModel) Init() tea.Cmd {
 	return m.timer.Init()
 }
 
-func CreateTimer(minutes int, seconds int, name string, message string) TimerModel {
-	minutesDuration := time.Duration(minutes) * time.Minute
-	secondsDuration := time.Duration(seconds) * time.Second
-
-	duration := minutesDuration + secondsDuration
-
+func CreateTimer(duration time.Duration, name string, message string) TimerModel {
 	return TimerModel{
 		timer:           timer.NewWithInterval(duration, time.Second),
 		progress:        progress.New(progress.WithScaledGradient("#EF15BF", "#7515EF")),
@@ -82,9 +77,7 @@ func speak(m TimerModel) tea.Cmd {
 
 func (m TimerModel) View() string {
 	if m.quitting || m.interrupting {
-		// TODO: Add a sound here?
-
-		// Returning a line break removes the progress indicator
+		// Returning a line break removes the progress indicator - Do nothing on quit for now
 		//return "\n"
 	}
 
@@ -133,24 +126,6 @@ func (m TimerModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		var cmd tea.Cmd
 		m.timer, cmd = m.timer.Update(msg)
 		return m, cmd
-
-	// Returning tea.Quit as the 2nd arg will quit the application abruptly and clear the progress bar
-	//case timer.TimeoutMsg:
-	//	return m, speak(m)
-	//var cmds []tea.Cmd
-	//var cmd tea.Cmd
-	//
-	//cmds = append(cmds, m.progress.SetPercent(100))
-	//
-	//m.timer, cmd = m.timer.Update(msg)
-	//
-	//progressModel, anotherCmd := m.progress.Update(msg)
-	//m.progress = progressModel.(progress.Model)
-	////m.progress.Update(msg)
-	//cmds = append(cmds, cmd, anotherCmd, speak(m))
-	////var _ tea.Cmd
-	////m.timer, cmd = m.timer.Update(msg)
-	//return m, tea.Batch(cmds...)
 
 	case progress.FrameMsg:
 		progressModel, cmd := m.progress.Update(msg)

@@ -3,14 +3,14 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 	"github.com/techygrrrl/timerrr/main/models"
 )
 
-var minutes int
-var seconds int
+var timerDuration time.Duration
 var sayMessage string
 var timerName string
 
@@ -23,15 +23,7 @@ var startCmd = &cobra.Command{
 If both are omitted, a 30 second timer will be started.`,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: collect message from flags
-		//fmt.Printf("start called with minutes = %d and seconds = %d \n", minutes, seconds)
-
-		// With message
-		//defaultTimer := models.CreateTimer(minutes, seconds, "Hello! Your timer is done!")
-
-		// Without message
-		defaultTimer := models.CreateTimer(minutes, seconds, timerName, sayMessage)
-
+		defaultTimer := models.CreateTimer(timerDuration, timerName, sayMessage)
 		program := tea.NewProgram(defaultTimer)
 
 		_, err := program.Run()
@@ -45,8 +37,7 @@ If both are omitted, a 30 second timer will be started.`,
 func init() {
 	// TODO: Add ability to configure default timer
 	// TODO: Voice customization
-	startCmd.Flags().IntVarP(&minutes, "minutes", "m", 0, "Minutes")
-	startCmd.Flags().IntVarP(&seconds, "seconds", "s", 30, "Seconds")
+	startCmd.Flags().DurationVarP(&timerDuration, "duration", "d", 30*time.Second, "Duration to run the timer")
 	startCmd.Flags().StringVarP(&timerName, "name", "n", "My Timerrr", "Message to speak after completed")
 	startCmd.Flags().StringVar(&sayMessage, "say", "", "Message to speak after completed")
 
