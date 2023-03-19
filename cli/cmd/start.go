@@ -21,15 +21,8 @@ var startCmd = &cobra.Command{
 If both are omitted, a 30 second timer will be started.`,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("start called with minutes = %d and seconds = %d \n", minutes, seconds)
-
-		// TODO: bubbletea things
-		// Create a bubble tea app
-		// Timer countdown
-		// End the process
-		// Send a message (say)
-
-		defaultTimer := models.CreateTimer(minutes, seconds, true)
+		//fmt.Printf("start called with minutes = %d and seconds = %d \n", minutes, seconds)
+		defaultTimer := models.CreateTimer(minutes, seconds)
 		program := tea.NewProgram(defaultTimer)
 
 		_, err := program.Run()

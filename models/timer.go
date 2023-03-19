@@ -11,10 +11,7 @@ import (
 )
 
 var (
-	name                string
-	altScreen           bool
 	winHeight, winWidth int
-	version             = "dev"
 	quitKeys            = key.NewBinding(key.WithKeys("esc", "q"))
 	intKeys             = key.NewBinding(key.WithKeys("ctrl+c"))
 	boldStyle           = lipgloss.NewStyle().Bold(true)
@@ -33,7 +30,7 @@ type TimerModel struct {
 	duration     time.Duration
 	name         string // The name of the timer
 	start        time.Time
-	altScreen    bool
+	altScreen    bool // Full screen
 	quitting     bool
 	interrupting bool
 	// endMessage string // The message to display and say at the end of the timer
@@ -44,7 +41,7 @@ func (m TimerModel) Init() tea.Cmd {
 	return m.timer.Init()
 }
 
-func CreateTimer(minutes int, seconds int, running bool) TimerModel {
+func CreateTimer(minutes int, seconds int) TimerModel {
 	minutesDuration := time.Duration(minutes) * time.Minute
 	secondsDuration := time.Duration(seconds) * time.Second
 
@@ -52,12 +49,12 @@ func CreateTimer(minutes int, seconds int, running bool) TimerModel {
 
 	return TimerModel{
 		timer:        timer.NewWithInterval(duration, time.Second),
-		progress:     progress.New(progress.WithDefaultGradient()),
+		progress:     progress.New(progress.WithScaledGradient("#EF15BF", "#7515EF")),
 		passed:       0,
 		duration:     duration,
 		name:         "Timerrr",
 		start:        time.Now(),
-		altScreen:    altScreen,
+		altScreen:    true,
 		quitting:     false,
 		interrupting: false,
 	}
@@ -77,10 +74,8 @@ func (m TimerModel) View() string {
 		textWidth, textHeight := lipgloss.Size(result)
 		return lipgloss.NewStyle().Margin((winHeight-textHeight)/2, (winWidth-textWidth)/2).Render(result)
 	}
+
 	return result
-	// TODO: format duration better
-	// Progress bar??????????
-	//return fmt.Sprintf("[%s]: %s ... %s", m.name, m.duration, m.passed)
 }
 
 func (m TimerModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -111,9 +106,10 @@ func (m TimerModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.timer, cmd = m.timer.Update(msg)
 		return m, cmd
 
-	case timer.TimeoutMsg:
-		m.quitting = true
-		return m, tea.Quit
+	// Enabling this will exit abruptly and clear the progress bar
+	//case timer.TimeoutMsg:
+	//	m.quitting = true
+	//	return m, nil
 
 	case progress.FrameMsg:
 		progressModel, cmd := m.progress.Update(msg)
