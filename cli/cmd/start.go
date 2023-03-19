@@ -2,15 +2,15 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
+	"github.com/techygrrrl/timerrr/main/models"
 )
 
 var minutes int
 var seconds int
-
-// TODO: Add ability to configure default timer
-// TODO: Add ability to save timers (TUI)
 
 var startCmd = &cobra.Command{
 	Use:   "start",
@@ -24,10 +24,24 @@ If both are omitted, a 30 second timer will be started.`,
 		fmt.Printf("start called with minutes = %d and seconds = %d \n", minutes, seconds)
 
 		// TODO: bubbletea things
+		// Create a bubble tea app
+		// Timer countdown
+		// End the process
+		// Send a message (say)
+
+		defaultTimer := models.CreateTimer(minutes, seconds, true)
+		program := tea.NewProgram(defaultTimer)
+
+		_, err := program.Run()
+		if err != nil {
+			fmt.Printf("There has been error: %v", err)
+			os.Exit(1)
+		}
 	},
 }
 
 func init() {
+	// TODO: Add ability to configure default timer
 	startCmd.Flags().IntVarP(&minutes, "minutes", "m", 0, "Minutes")
 	startCmd.Flags().IntVarP(&seconds, "seconds", "s", 30, "Seconds")
 
