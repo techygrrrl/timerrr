@@ -127,7 +127,7 @@ func addTimer(timer SavedTimer) error {
 }
 
 func persistTimers(timers []SavedTimer) error {
-	data, err := json.Marshal(timers)
+	data, err := json.MarshalIndent(timers, "", "  ")
 	if err != nil {
 		return err
 	}
