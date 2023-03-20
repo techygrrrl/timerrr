@@ -18,7 +18,9 @@ var (
 )
 
 type tableModel struct {
-	table table.Model
+	timers []models.TimerModel
+	table  table.Model
+	timer  *models.TimerModel
 }
 
 var baseStyle = lipgloss.NewStyle().
@@ -26,6 +28,12 @@ var baseStyle = lipgloss.NewStyle().
 	BorderForeground(lipgloss.Color("#15AEEF"))
 
 func (m tableModel) View() string {
+	// TODO: FIX: This doesn't work
+	if m.timer != nil {
+		fmt.Println("Returning timer view")
+		return m.timer.View()
+	}
+
 	result := baseStyle.Render(m.table.View()) + "\n"
 	textWidth, textHeight := lipgloss.Size(result)
 
@@ -41,6 +49,14 @@ func (m tableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		winHeight, winWidth = msg.Height, msg.Width
 		return m, nil
 
+	// TODO: Remove if not useful??
+	//case timer.TickMsg:
+	//	fmt.Println("Tick happened")
+	//
+	//	if m.timer != nil {
+	//		return m.Update(msg)
+	//	}
+
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "esc":
@@ -51,10 +67,22 @@ func (m tableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case "q", "ctrl+c":
 			return m, tea.Quit
+
+		// TODO: Swap to new timer view w/ working functionality
 		case "enter":
-			return m, tea.Batch(
-				tea.Printf("Let's go to %s!", m.table.SelectedRow()[1]),
-			)
+			//if m.timers == nil {
+			//	return m, nil
+			//}
+
+			index := m.table.Cursor()
+			selected := m.timers[index]
+			m.timer = &m.timers[index]
+
+			//timer, cmd := m.timer.Update(timer.TickMsg{})
+			//m.timer = &timer
+
+			//return m, cmd
+			return selected, selected.Init()
 		}
 	}
 	m.table, cmd = m.table.Update(msg)
@@ -67,9 +95,9 @@ var rootCmd = &cobra.Command{
 	//Short: "⏱ Create timerrrs!",
 	//	Long: ``,
 
-	// TODO: Do the TUI stuff here
 	Run: func(cmd *cobra.Command, args []string) {
-		staticTimers := []models.TimerModel{
+		// TODO: Get timers from somewhere
+		timers := []models.TimerModel{
 			models.CreateTimer(time.Second*2, "My First timer", ""),
 			models.CreateTimer(time.Minute*5, "Stand Up", "You can sit down now"),
 			models.CreateTimer(time.Second*30+(time.Minute*4), "Tea Timerrr", "Your tea is ready"),
@@ -81,7 +109,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		var rows []table.Row
-		for _, timer := range staticTimers {
+		for _, timer := range timers {
 			rows = append(rows, timer.TableRowDisplay())
 		}
 
@@ -105,7 +133,10 @@ var rootCmd = &cobra.Command{
 
 		timerTable.SetStyles(styles)
 
-		model := tableModel{timerTable}
+		model := tableModel{
+			table:  timerTable,
+			timers: timers,
+		}
 		_, err := tea.NewProgram(model).Run()
 		if err != nil {
 			fmt.Println("Error running program:", err)
