@@ -127,7 +127,6 @@ func (m tableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use: "timerrr",
 	//Short: "⏱ Create timerrrs!",

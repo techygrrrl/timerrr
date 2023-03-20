@@ -178,7 +178,7 @@ func createAddModel() AddModel {
 			input.Focus()
 			input.PromptStyle = focusedStyle
 			input.TextStyle = focusedStyle
-			input.CharLimit = 15
+			input.CharLimit = 30
 
 		case 1:
 			input.Placeholder = "Duration, e.g. 5m30s"
