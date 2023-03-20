@@ -43,6 +43,19 @@ type TimerModel struct {
 }
 
 func (m TimerModel) Init() tea.Cmd {
+	// TODO: Delete if useless
+	m.progress.Width = winWidth
+
+	// TODO: Delete if useless
+	//cmd := m.timer.Init()
+	//
+	//m.Update(tea.WindowSizeMsg{
+	//	Width:  winWidth,
+	//	Height: winHeight,
+	//})
+	//
+	//return cmd
+
 	return m.timer.Init()
 }
 

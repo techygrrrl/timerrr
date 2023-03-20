@@ -47,6 +47,12 @@ func (m tableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		winHeight, winWidth = msg.Height, msg.Width
+
+		// TODO: Does this help with the initial timer size?
+		if m.timer != nil {
+			m.timer.Update(msg)
+		}
+
 		return m, nil
 
 	// TODO: Remove if not useful??
@@ -70,21 +76,29 @@ func (m tableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// TODO: Swap to new timer view w/ working functionality
 		case "enter":
-			//if m.timers == nil {
-			//	return m, nil
-			//}
-
 			index := m.table.Cursor()
 			selected := m.timers[index]
 			m.timer = &m.timers[index]
 
-			//timer, cmd := m.timer.Update(timer.TickMsg{})
-			//m.timer = &timer
+			// TODO: ???
+			// The timer loads at the wrong size, I'm trying to give it window size info
 
-			//return m, cmd
-			return selected, selected.Init()
+			cmd := selected.Init()
+
+			// This is the one that works to center it vertically
+			// But the width of the progress bar is still too small
+			// progress.Width never gets the right winWidth / msg.Width
+			m.timer.Update(tea.WindowSizeMsg{
+				Width:  winWidth,
+				Height: winHeight,
+			})
+
+			// This successfully returns a functioning timer,
+			// however the view is not the right size
+			return selected, cmd
 		}
 	}
+
 	m.table, cmd = m.table.Update(msg)
 	return m, cmd
 }
