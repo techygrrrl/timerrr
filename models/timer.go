@@ -10,6 +10,7 @@ import (
 	"github.com/charmbracelet/bubbles/timer"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/techygrrrl/timerrr/main/utils"
 )
 
 var (
@@ -67,7 +68,9 @@ func speak(m TimerModel) tea.Cmd {
 		message = fmt.Sprintf("The timer %s has completed", m.name)
 	}
 
-	sayCmd := exec.Command("say", "-v", "daniel", message)
+	voice := utils.GetRandomTTSVoice()
+
+	sayCmd := exec.Command("say", "-v", voice, message)
 
 	return tea.ExecProcess(sayCmd, func(err error) tea.Msg {
 		fmt.Println("Error: ", err)
