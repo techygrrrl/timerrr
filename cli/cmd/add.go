@@ -12,6 +12,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
+	"github.com/techygrrrl/timerrr/main/models"
 	"github.com/techygrrrl/timerrr/main/utils"
 )
 
@@ -29,6 +30,24 @@ type AddModel struct {
 	focusIndex int
 	inputs     []textinput.Model
 	cursorMode cursor.Mode
+}
+
+var addCmd = &cobra.Command{
+	Use:   "add",
+	Short: "Add a new timer",
+	Run: func(cmd *cobra.Command, args []string) {
+		model := createAddModel()
+
+		_, err := tea.NewProgram(model).Run()
+		if err != nil {
+			fmt.Println("Error running program:", err)
+			os.Exit(1)
+		}
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(addCmd)
 }
 
 func (m AddModel) Init() tea.Cmd {
@@ -57,7 +76,7 @@ func (m AddModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 
 				// Add the new timer
-				err = utils.AddTimer(utils.SavedTimer{
+				err = utils.AddTimer(models.SavedTimer{
 					Name:        m.inputs[0].Value(),
 					Duration:    duration,
 					DoneMessage: m.inputs[2].Value(),
@@ -174,22 +193,4 @@ func createAddModel() AddModel {
 	}
 
 	return model
-}
-
-var addCmd = &cobra.Command{
-	Use:   "add",
-	Short: "Add a new timer",
-	Run: func(cmd *cobra.Command, args []string) {
-		model := createAddModel()
-
-		_, err := tea.NewProgram(model).Run()
-		if err != nil {
-			fmt.Println("Error running program:", err)
-			os.Exit(1)
-		}
-	},
-}
-
-func init() {
-	rootCmd.AddCommand(addCmd)
 }

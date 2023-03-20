@@ -3,43 +3,47 @@ package utils
 import (
 	"encoding/json"
 	"os"
-	"time"
-)
 
-type SavedTimer struct {
-	Name        string        `json:"name"`
-	Duration    time.Duration `json:"duration"`
-	DoneMessage string        `json:"done_message"`
-}
+	"github.com/techygrrrl/timerrr/main/models"
+)
 
 const (
 	timersJsonFileName = "timers.json"
 )
 
-func AddTimer(timer SavedTimer) error {
-	timers := loadTimersFromFile()
+func AddTimer(timer models.SavedTimer) error {
+	timers := LoadTimersFromFile()
 	timers = append(timers, timer)
 
 	return persistTimers(timers)
 }
 
-func loadTimersFromFile() []SavedTimer {
+func RemoveTimerAtIndex(index int) error {
+	timers := LoadTimersFromFile()
+
+	// Learn: https://go.dev/play/p/M-7bwMAROWB
+	timers = append(timers[:index], timers[index+1:]...)
+
+	return persistTimers(timers)
+}
+
+func LoadTimersFromFile() []models.SavedTimer {
 	data, err := os.ReadFile(timersJsonFileName)
 	if err != nil {
 		// Empty file, return empty array
-		return []SavedTimer{}
+		return []models.SavedTimer{}
 	}
 
-	var timers []SavedTimer
+	var timers []models.SavedTimer
 	err = json.Unmarshal(data, &timers)
 	if err != nil {
-		return []SavedTimer{}
+		return []models.SavedTimer{}
 	}
 
 	return timers
 }
 
-func persistTimers(timers []SavedTimer) error {
+func persistTimers(timers []models.SavedTimer) error {
 	data, err := json.MarshalIndent(timers, "", "  ")
 	if err != nil {
 		return err

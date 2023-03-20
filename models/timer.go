@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"math/rand"
 	"os/exec"
 	"time"
 
@@ -10,7 +11,6 @@ import (
 	"github.com/charmbracelet/bubbles/timer"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/techygrrrl/timerrr/main/utils"
 )
 
 var (
@@ -81,6 +81,16 @@ func CreateTimer(duration time.Duration, name string, message string) TimerModel
 	}
 }
 
+type SavedTimer struct {
+	Name        string        `json:"name"`
+	Duration    time.Duration `json:"duration"`
+	DoneMessage string        `json:"done_message"`
+}
+
+func (timer SavedTimer) AsTimerModel() TimerModel {
+	return CreateTimer(timer.Duration, timer.Name, timer.DoneMessage)
+}
+
 type speakFinishedMsg struct{ err error }
 
 func speak(m TimerModel) tea.Cmd {
@@ -89,7 +99,7 @@ func speak(m TimerModel) tea.Cmd {
 		message = fmt.Sprintf("The timer %s has completed", m.name)
 	}
 
-	voice := utils.GetRandomTTSVoice()
+	voice := getRandomTTSVoice()
 
 	sayCmd := exec.Command("say", "-v", voice, message)
 
@@ -97,6 +107,12 @@ func speak(m TimerModel) tea.Cmd {
 		fmt.Println("Error: ", err)
 		return speakFinishedMsg{err}
 	})
+}
+
+func getRandomTTSVoice() string {
+	voices := []string{"daniel", "samantha", "rishi", "veena", "moira", "fiona", "tessa"}
+	voiceIndex := rand.Intn(len(voices))
+	return voices[voiceIndex]
 }
 
 func (m TimerModel) View() string {

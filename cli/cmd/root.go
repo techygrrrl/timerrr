@@ -2,14 +2,15 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
-	"time"
 
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
 	"github.com/techygrrrl/timerrr/main/models"
+	"github.com/techygrrrl/timerrr/main/utils"
 )
 
 var (
@@ -74,6 +75,29 @@ func (m tableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q", "ctrl+c":
 			return m, tea.Quit
 
+		case "del", "delete", "backspace":
+			index := m.table.Cursor()
+
+			m.table.Blur()
+
+			// rw_grim: PomoYoloTimerrrs - By techygrrrl
+			err := utils.RemoveTimerAtIndex(index)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			timers := utils.LoadTimersFromFile()
+			var timerModels []models.TimerModel
+
+			for _, element := range timers {
+				timerModels = append(timerModels, element.AsTimerModel())
+			}
+
+			timerTable := createTableForTimers(timerModels)
+			m.table = timerTable
+
+			return m, nil
+
 		// TODO: Swap to new timer view w/ working functionality
 		case "enter":
 			index := m.table.Cursor()
@@ -110,46 +134,18 @@ var rootCmd = &cobra.Command{
 	//	Long: ``,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: Get timers from somewhere
-		timers := []models.TimerModel{
-			models.CreateTimer(time.Second*2, "My First timer", ""),
-			models.CreateTimer(time.Minute*5, "Stand Up", "You can sit down now"),
-			models.CreateTimer(time.Second*30+(time.Minute*4), "Tea Timerrr", "Your tea is ready"),
+		timers := utils.LoadTimersFromFile()
+
+		var timerModels []models.TimerModel
+		for _, element := range timers {
+			timerModels = append(timerModels, element.AsTimerModel())
 		}
 
-		columns := []table.Column{
-			{Title: "Duration", Width: 10},
-			{Title: "Name", Width: 60},
-		}
-
-		var rows []table.Row
-		for _, timer := range timers {
-			rows = append(rows, timer.TableRowDisplay())
-		}
-
-		timerTable := table.New(
-			table.WithColumns(columns),
-			table.WithRows(rows),
-			table.WithFocused(true),
-			table.WithHeight(7),
-		)
-		styles := table.DefaultStyles()
-		styles.Header = styles.Header.
-			BorderStyle(lipgloss.NormalBorder()).
-			BorderForeground(lipgloss.Color("#15AEEF")).
-			BorderBottom(true).
-			Bold(true)
-
-		styles.Selected = styles.Selected.
-			Foreground(lipgloss.Color("#FFFFFF")).
-			Background(lipgloss.Color("#EF15BF")).
-			Bold(false)
-
-		timerTable.SetStyles(styles)
+		timerTable := createTableForTimers(timerModels)
 
 		model := tableModel{
 			table:  timerTable,
-			timers: timers,
+			timers: timerModels,
 		}
 		_, err := tea.NewProgram(model).Run()
 		if err != nil {
@@ -157,6 +153,41 @@ var rootCmd = &cobra.Command{
 			os.Exit(1)
 		}
 	},
+}
+
+func createTableForTimers(timers []models.TimerModel) table.Model {
+	columns := []table.Column{
+		{Title: "Duration", Width: 10},
+		{Title: "Name", Width: 60},
+	}
+
+	var rows []table.Row
+	for _, timer := range timers {
+		rows = append(rows, timer.TableRowDisplay())
+	}
+
+	timerTable := table.New(
+		table.WithColumns(columns),
+		table.WithRows(rows),
+		table.WithFocused(true),
+		table.WithHeight(7),
+	)
+
+	styles := table.DefaultStyles()
+	styles.Header = styles.Header.
+		BorderStyle(lipgloss.NormalBorder()).
+		BorderForeground(lipgloss.Color("#15AEEF")).
+		BorderBottom(true).
+		Bold(true)
+
+	styles.Selected = styles.Selected.
+		Foreground(lipgloss.Color("#FFFFFF")).
+		Background(lipgloss.Color("#EF15BF")).
+		Bold(false)
+
+	timerTable.SetStyles(styles)
+
+	return timerTable
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
