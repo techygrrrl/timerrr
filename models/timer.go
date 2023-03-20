@@ -14,11 +14,12 @@ import (
 )
 
 var (
-	winHeight, winWidth int
-	quitKeys            = key.NewBinding(key.WithKeys("esc", "q"))
-	intKeys             = key.NewBinding(key.WithKeys("ctrl+c"))
-	boldStyle           = lipgloss.NewStyle().Bold(true)
-	italicStyle         = lipgloss.NewStyle().Italic(true)
+	winHeight   int
+	winWidth    int
+	quitKeys    = key.NewBinding(key.WithKeys("esc", "q"))
+	intKeys     = key.NewBinding(key.WithKeys("ctrl+c"))
+	boldStyle   = lipgloss.NewStyle().Bold(true)
+	italicStyle = lipgloss.NewStyle().Italic(true)
 )
 
 const (

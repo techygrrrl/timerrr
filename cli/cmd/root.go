@@ -12,6 +12,11 @@ import (
 	"github.com/techygrrrl/timerrr/main/models"
 )
 
+var (
+	winHeight int
+	winWidth  int
+)
+
 type tableModel struct {
 	table table.Model
 }
@@ -21,7 +26,10 @@ var baseStyle = lipgloss.NewStyle().
 	BorderForeground(lipgloss.Color("#15AEEF"))
 
 func (m tableModel) View() string {
-	return baseStyle.Render(m.table.View()) + "\n"
+	result := baseStyle.Render(m.table.View()) + "\n"
+	textWidth, textHeight := lipgloss.Size(result)
+
+	return lipgloss.NewStyle().Margin((winHeight-textHeight)/2, (winWidth-textWidth)/2).Render(result) + "\n"
 }
 
 func (m tableModel) Init() tea.Cmd { return nil }
@@ -29,6 +37,10 @@ func (m tableModel) Init() tea.Cmd { return nil }
 func (m tableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		winHeight, winWidth = msg.Height, msg.Width
+		return m, nil
+
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "esc":
@@ -90,9 +102,8 @@ var rootCmd = &cobra.Command{
 			Foreground(lipgloss.Color("#FFFFFF")).
 			Background(lipgloss.Color("#EF15BF")).
 			Bold(false)
-		timerTable.SetStyles(styles)
 
-		// TODO: Full screen table
+		timerTable.SetStyles(styles)
 
 		model := tableModel{timerTable}
 		_, err := tea.NewProgram(model).Run()
