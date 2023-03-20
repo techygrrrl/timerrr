@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -13,10 +12,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
-)
-
-const (
-	timersJsonFileName = "timers.json"
+	"github.com/techygrrrl/timerrr/main/utils"
 )
 
 var (
@@ -39,14 +35,7 @@ func (m AddModel) Init() tea.Cmd {
 	return textinput.Blink
 }
 
-type SavedTimer struct {
-	Name        string        `json:"name"`
-	Duration    time.Duration `json:"duration"`
-	DoneMessage string        `json:"done_message"`
-}
-
 func (m AddModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -68,7 +57,7 @@ func (m AddModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 
 				// Add the new timer
-				err = addTimer(SavedTimer{
+				err = utils.AddTimer(utils.SavedTimer{
 					Name:        m.inputs[0].Value(),
 					Duration:    duration,
 					DoneMessage: m.inputs[2].Value(),
@@ -117,38 +106,6 @@ func (m AddModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	cmd := m.updateInputs(msg)
 
 	return m, cmd
-}
-
-func addTimer(timer SavedTimer) error {
-	timers := loadTimersFromFile()
-	timers = append(timers, timer)
-
-	return persistTimers(timers)
-}
-
-func persistTimers(timers []SavedTimer) error {
-	data, err := json.MarshalIndent(timers, "", "  ")
-	if err != nil {
-		return err
-	}
-
-	return os.WriteFile(timersJsonFileName, data, 0644)
-}
-
-func loadTimersFromFile() []SavedTimer {
-	data, err := os.ReadFile(timersJsonFileName)
-	if err != nil {
-		// Empty file, return empty array
-		return []SavedTimer{}
-	}
-
-	var timers []SavedTimer
-	err = json.Unmarshal(data, &timers)
-	if err != nil {
-		return []SavedTimer{}
-	}
-
-	return timers
 }
 
 func (m AddModel) View() string {
