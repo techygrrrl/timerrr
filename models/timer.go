@@ -45,6 +45,13 @@ func (m TimerModel) Init() tea.Cmd {
 	return m.timer.Init()
 }
 
+func (m TimerModel) TableRowDisplay() []string {
+	return []string{
+		m.duration.String(),
+		m.name,
+	}
+}
+
 func CreateTimer(duration time.Duration, name string, message string) TimerModel {
 	return TimerModel{
 		timer:           timer.NewWithInterval(duration, time.Second),
