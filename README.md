@@ -2,6 +2,9 @@
 
 `timerrr` is a command line-based timer app written in Go.
 
+![](screenshots/cmd_timerrr.png)
+![](screenshots/cmd_timerrr_run.png)
+
 - [Requirements](#requirements)
 - [Development](#development)
 
