@@ -21,3 +21,12 @@ Run the following command to run the application:
 
     go run github.com/techygrrrl/timerrr/main
 
+## Testing
+
+Run the tests with the following command:
+
+    go test -v ./...
+
+To run tests with coverage run:
+
+    go test -v ./... -cover
