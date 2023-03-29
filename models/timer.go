@@ -125,6 +125,10 @@ func (m TimerModel) View() string {
 	if m.name != "" {
 		result += ": " + italicStyle.Render(m.name)
 	}
+
+	// Sets the width of the progress bar to ensure a consistent size when used by another command
+	m.progress.Width = winWidth - padding*2 - 4
+
 	result += " - " + boldStyle.Render(m.timer.View()) + "\n" + m.progress.View()
 	if m.altScreen {
 		textWidth, textHeight := lipgloss.Size(result)
