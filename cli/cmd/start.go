@@ -35,7 +35,6 @@ If both are omitted, a 30 second timer will be started.`,
 }
 
 func init() {
-	// TODO: Voice customization
 	startCmd.Flags().DurationVarP(&timerDuration, "duration", "d", 30*time.Second, "Duration to run the timer")
 	startCmd.Flags().StringVarP(&timerName, "name", "n", "My Timerrr", "Message to speak after completed")
 	startCmd.Flags().StringVar(&sayMessage, "say", "", "Message to speak after completed")

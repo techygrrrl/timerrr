@@ -39,24 +39,10 @@ type TimerModel struct {
 	altScreen       bool // Full screen
 	quitting        bool
 	interrupting    bool
-	// TODO: Customize colour?
-	// colour string // Hex representation of the timer
 }
 
 func (m TimerModel) Init() tea.Cmd {
-	// TODO: Delete if useless
 	m.progress.Width = winWidth
-
-	// TODO: Delete if useless
-	//cmd := m.timer.Init()
-	//
-	//m.Update(tea.WindowSizeMsg{
-	//	Width:  winWidth,
-	//	Height: winHeight,
-	//})
-	//
-	//return cmd
-
 	return m.timer.Init()
 }
 

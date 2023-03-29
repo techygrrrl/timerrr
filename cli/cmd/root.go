@@ -29,7 +29,6 @@ var baseStyle = lipgloss.NewStyle().
 	BorderForeground(lipgloss.Color("#15AEEF"))
 
 func (m tableModel) View() string {
-	// TODO: FIX: This doesn't work
 	if m.timer != nil {
 		fmt.Println("Returning timer view")
 		return m.timer.View()
@@ -49,20 +48,11 @@ func (m tableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		winHeight, winWidth = msg.Height, msg.Width
 
-		// TODO: Does this help with the initial timer size?
 		if m.timer != nil {
 			m.timer.Update(msg)
 		}
 
 		return m, nil
-
-	// TODO: Remove if not useful??
-	//case timer.TickMsg:
-	//	fmt.Println("Tick happened")
-	//
-	//	if m.timer != nil {
-	//		return m.Update(msg)
-	//	}
 
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -98,27 +88,20 @@ func (m tableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			return m, nil
 
-		// TODO: Swap to new timer view w/ working functionality
 		case "enter":
 			index := m.table.Cursor()
 			selected := m.timers[index]
 			m.timer = &m.timers[index]
 
-			// TODO: ???
-			// The timer loads at the wrong size, I'm trying to give it window size info
-
 			cmd := selected.Init()
 
-			// This is the one that works to center it vertically
-			// But the width of the progress bar is still too small
-			// progress.Width never gets the right winWidth / msg.Width
+			// This helps to center it vertically
 			m.timer.Update(tea.WindowSizeMsg{
 				Width:  winWidth,
 				Height: winHeight,
 			})
 
-			// This successfully returns a functioning timer,
-			// however the view is not the right size
+			// This successfully returns a functioning timer
 			return selected, cmd
 		}
 	}
@@ -129,8 +112,6 @@ func (m tableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 var rootCmd = &cobra.Command{
 	Use: "timerrr",
-	//Short: "⏱ Create timerrrs!",
-	//	Long: ``,
 
 	Run: func(cmd *cobra.Command, args []string) {
 		timers := utils.LoadTimersFromFile()
@@ -189,8 +170,6 @@ func createTableForTimers(timers []models.TimerModel) table.Model {
 	return timerTable
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 
