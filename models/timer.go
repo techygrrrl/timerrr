@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os/exec"
+	"runtime"
 	"time"
 
 	"github.com/charmbracelet/bubbles/key"
@@ -91,6 +92,8 @@ func (timer SavedTimer) AsTimerModel() TimerModel {
 	return CreateTimer(timer.Duration, timer.Name, timer.DoneMessage)
 }
 
+// region TTS
+
 type speakFinishedMsg struct{ err error }
 
 func speak(m TimerModel) tea.Cmd {
@@ -99,9 +102,7 @@ func speak(m TimerModel) tea.Cmd {
 		message = fmt.Sprintf("The timer %s has completed", m.name)
 	}
 
-	voice := getRandomTTSVoice()
-
-	sayCmd := exec.Command("say", "-v", voice, message)
+	sayCmd := ttsCommandForOS(message)
 
 	return tea.ExecProcess(sayCmd, func(err error) tea.Msg {
 		fmt.Println("Error: ", err)
@@ -109,11 +110,40 @@ func speak(m TimerModel) tea.Cmd {
 	})
 }
 
-func getRandomTTSVoice() string {
+func ttsCommandForOS(message string) *exec.Cmd {
+	switch runtime.GOOS {
+	case "darwin":
+		return ttsCommandMac(message)
+	case "windows":
+		return ttsCommandWindows(message)
+	case "linux":
+		return ttsCommandLinux(message)
+	default:
+		// Fallback echo command
+		return exec.Command("echo", message)
+	}
+}
+
+func ttsCommandMac(message string) *exec.Cmd {
 	voices := []string{"daniel", "samantha", "rishi", "veena", "moira", "fiona", "tessa"}
 	voiceIndex := rand.Intn(len(voices))
-	return voices[voiceIndex]
+	voice := voices[voiceIndex]
+
+	return exec.Command("say", "-v", voice, message)
 }
+
+// TODO: Implement espeak - https://github.com/techygrrrl/timerrr/issues/1
+// TODO: Implement mimic3 - https://github.com/techygrrrl/timerrr/issues/2
+func ttsCommandLinux(message string) *exec.Cmd {
+	return exec.Command("echo", message)
+}
+
+// TODO: Implement - https://github.com/techygrrrl/timerrr/issues/3
+func ttsCommandWindows(message string) *exec.Cmd {
+	return exec.Command("echo", message)
+}
+
+// endregion TTS
 
 func (m TimerModel) View() string {
 	if m.quitting || m.interrupting {
