@@ -18,7 +18,7 @@ var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start a timerrr!",
 
-	Long: `You can start a timer with the flag --minutes 2 (-m 2) and/or --seconds 30 (-s 30) to start a timer for 2 minutes and 30 seconds.
+	Long: `You can start a timer with the flag -d 2m30s to start a timer for 2 minutes and 30 seconds. Add options --name and --say to name your timerrr and speak a message aloud with TTS. 
 
 If both are omitted, a 30 second timer will be started.`,
 
