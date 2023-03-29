@@ -1,4 +1,4 @@
-# timerrr
+# ⏳ timerrr
 
 `timerrr` is a command line-based timer app written in Go.
 
@@ -7,26 +7,14 @@
 
 🎬 See [video](https://github.com/techygrrrl/timerrr/commit/ada55c808fd77cff61de555bc35b839960b03f7a#r105166581)
 
-- [Requirements](#requirements)
-- [Development](#development)
+- [🖥 Requirements](#-requirements)
+- [💼 Contributing](#-contributing)
 
-## Requirements
+## 🖥 Requirements
 
 - `go 1.20`
 - [cobra-cli](https://github.com/spf13/cobra#usage)
 
-## Development
+## 💼 Contributing
 
-Run the following command to run the application:
-
-    go run github.com/techygrrrl/timerrr/main
-
-## Testing
-
-Run the tests with the following command:
-
-    go test -v ./...
-
-To run tests with coverage run:
-
-    go test -v ./... -cover
+See the [contributor's guide](CONTRIBUTING.md).
