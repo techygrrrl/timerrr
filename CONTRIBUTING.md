@@ -2,6 +2,7 @@
 
 - [💽 Development](#-development)
 - [✅ Testing](#-testing)
+- [🚀 Releasing](#-releasing)
 
 
 ## 💽 Development
@@ -21,3 +22,8 @@ To run tests with coverage run:
     go test -v ./... -cover
 
 Write any operating-specific tests in a file for that operating system, e.g. `os_utils_linux_test.go` will only run on Linux.
+
+
+## 🚀 Releasing
+
+Uses [goreleaser](https://goreleaser.com/quick-start/).
