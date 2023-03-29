@@ -1,5 +1,12 @@
 package utils
 
+import (
+	"fmt"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
 func TestIsLinux(t *testing.T) {
 	fmt.Printf("is Linux? %t", IsLinux())
 	assert.True(t, IsLinux())
