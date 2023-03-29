@@ -20,7 +20,7 @@ func TestUserConfigDirLinux(t *testing.T) {
 }
 
 func TestUserConfigFilePathLinux(t *testing.T) {
-	path, err := os.UserConfigDir()
+	path, err := ConfigFilePath()
 
 	assert.Nil(t, err)
 	assert.Equal(t, "/home/runner/.config/timers.json", path)

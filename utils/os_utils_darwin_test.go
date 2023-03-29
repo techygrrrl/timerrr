@@ -21,7 +21,7 @@ func TestUserConfigDirMac(t *testing.T) {
 }
 
 func TestUserConfigFilePathMac(t *testing.T) {
-	path, err := os.UserConfigDir()
+	path, err := ConfigFilePath()
 
 	assert.Nil(t, err)
 	assert.Equal(t, "/Users/runner/Library/Application Support/timers.json", path)

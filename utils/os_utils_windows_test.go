@@ -20,7 +20,7 @@ func TestUserConfigDirWindows(t *testing.T) {
 }
 
 func TestUserConfigFilePathWindows(t *testing.T) {
-	path, err := os.UserConfigDir()
+	path, err := ConfigFilePath()
 
 	assert.Nil(t, err)
 	assert.Equal(t, "C:\\Users\\runneradmin\\AppData\\Roaming\\timerrr\\timers.json", path)
