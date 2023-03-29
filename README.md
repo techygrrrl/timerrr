@@ -16,6 +16,7 @@ Install the CLI:
 
     go install github.com/techygrrrl/timerrr@latest
 
+For detailed usage instructions, see the [Installation and Usage Guide](https://github.com/techygrrrl/timerrr/wiki/Installation-and-Usage).
 
 ## 💼 Contributing
 
