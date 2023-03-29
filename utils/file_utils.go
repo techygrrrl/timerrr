@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
+	"path/filepath"
 
 	"github.com/techygrrrl/timerrr/main/models"
 )
@@ -69,7 +70,7 @@ func ConfigFilePath() (string, error) {
 		return "", err
 	}
 
-	configDir = configDir + "/timerrr"
+	configDir = filepath.Join(configDir, "timerrr")
 
 	if _, err := os.Stat(configDir); errors.Is(err, os.ErrNotExist) {
 		err := os.Mkdir(configDir, os.ModePerm)
@@ -78,5 +79,5 @@ func ConfigFilePath() (string, error) {
 		}
 	}
 
-	return configDir + "/timers.json", nil
+	return filepath.Join(configDir, "timers.json"), nil
 }
