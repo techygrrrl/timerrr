@@ -7,13 +7,15 @@
 
 🎬 See [video](https://github.com/techygrrrl/timerrr/commit/ada55c808fd77cff61de555bc35b839960b03f7a#r105166581)
 
-- [🖥 Requirements](#-requirements)
+- [💽 Installing](#-installing)
 - [💼 Contributing](#-contributing)
 
-## 🖥 Requirements
+## 💽 Installing
 
-- `go 1.20`
-- [cobra-cli](https://github.com/spf13/cobra#usage)
+Install the CLI:
+
+    go install github.com/techygrrrl/timerrr@latest
+
 
 ## 💼 Contributing
 

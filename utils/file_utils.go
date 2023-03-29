@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/techygrrrl/timerrr/main/models"
+	"github.com/techygrrrl/timerrr/models"
 )
 
 func AddTimer(timer models.SavedTimer) error {

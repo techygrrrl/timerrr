@@ -1,4 +1,4 @@
-module github.com/techygrrrl/timerrr/main
+module github.com/techygrrrl/timerrr
 
 go 1.20
 

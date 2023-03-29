@@ -9,8 +9,8 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
-	"github.com/techygrrrl/timerrr/main/models"
-	"github.com/techygrrrl/timerrr/main/utils"
+	"github.com/techygrrrl/timerrr/models"
+	"github.com/techygrrrl/timerrr/utils"
 )
 
 var (
