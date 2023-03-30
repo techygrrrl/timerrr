@@ -12,6 +12,7 @@ import (
 	"github.com/charmbracelet/bubbles/timer"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/techygrrrl/timerrr/tts"
 )
 
 var (
@@ -97,6 +98,9 @@ func speak(m TimerModel) tea.Cmd {
 }
 
 func ttsCommandForOS(message string) *exec.Cmd {
+	// TODO: Delete this - it's just a proof of concept
+	message += tts.Speak(" - from multiple OS support")
+
 	switch runtime.GOOS {
 	case "darwin":
 		return ttsCommandMac(message)
