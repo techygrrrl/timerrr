@@ -125,6 +125,8 @@ func ttsCommandMac(message string) *exec.Cmd {
 // TODO: Implement espeak - https://github.com/techygrrrl/timerrr/issues/1
 // TODO: Implement mimic3 - https://github.com/techygrrrl/timerrr/issues/2
 func ttsCommandLinux(message string) *exec.Cmd {
+	//args := []string{"-v", "bob_australia", message, "-volume", "super_loud"}
+	//return exec.Command("espeak", args...)
 	return exec.Command("echo", message)
 }
 
