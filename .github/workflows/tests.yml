@@ -15,10 +15,10 @@ jobs:
           go install github.com/daixiang0/gci@latest
 
           goimports -w .
-          gci -w .
+          gci write .
 
           if [ -n "$(git status --porcelain)" ]; then
-            echo '🧼 To fix this check, install required tooling and run "goimports -w . && gci -w .;"'
+            echo '🧼 To fix this check, install required tooling and run "goimports -w . && gci write .;"'
             git status # Show the files that failed to pass the check.
             exit 1
           fi
