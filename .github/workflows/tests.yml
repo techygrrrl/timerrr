@@ -13,4 +13,16 @@ jobs:
       - uses: actions/setup-go@v4
         with:
           go-version: '>=1.20.0'
-      - run: go test -v ./... -cover
+      - name: Test & Lint
+        run: |
+          # Tests
+          go test -v ./... -cover
+          
+          # Lint
+          goimports -w .
+          
+          if [ -n "$(git status --porcelain)" ]; then
+            echo '🧼 To fix this check, run "goimports -w .;"'
+            git status # Show the files that failed to pass the check.
+            exit 1
+          fi

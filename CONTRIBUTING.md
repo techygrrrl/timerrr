@@ -3,6 +3,7 @@
 - [💽 Development](#-development)
 - [🖥 Requirements](#-requirements)
 - [✅ Testing](#-testing)
+  - [🧹🕸 Linting](#-linting)
 - [🚀 Releasing](#-releasing)
 
 
@@ -29,6 +30,19 @@ To run tests with coverage run:
     go test -v ./... -cover
 
 Write any operating-specific tests in a file for that operating system, e.g. `os_utils_linux_test.go` will only run on Linux.
+
+
+### 🧹🕸 Linting
+
+Use `goimports` for formatting and linting.
+
+Install it:
+
+    go install golang.org/x/tools/cmd/goimports@latest
+
+Run it:
+
+    goimports -w .
 
 
 ## 🚀 Releasing
