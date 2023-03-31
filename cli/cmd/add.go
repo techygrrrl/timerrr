@@ -147,7 +147,8 @@ func (m AddModel) View() string {
 }
 
 // TODO: Fix warning?
-//		Struct AddModel has methods on both value and pointer receivers. Such usage is not recommended by the Go Documentation.
+//
+//	Struct AddModel has methods on both value and pointer receivers. Such usage is not recommended by the Go Documentation.
 func (m *AddModel) updateInputs(msg tea.Msg) tea.Cmd {
 	cmds := make([]tea.Cmd, len(m.inputs))
 
