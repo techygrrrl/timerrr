@@ -1,0 +1,10 @@
+#!/bin/sh
+if [[ $(gci diff .) ]]; then
+  echo '💥 Lint error: gci'
+  exit 1
+fi
+
+if [[ $(goimports -d .) ]]; then
+  echo '💥 Lint error: goimports'
+  exit 1
+fi

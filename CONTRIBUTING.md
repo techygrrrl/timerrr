@@ -9,6 +9,10 @@
 
 ## 💽 Development
 
+Run the setup script:
+
+    ./scripts/setup.sh
+
 Run the following command to run the application:
 
     go run github.com/techygrrrl/timerrr
@@ -34,16 +38,16 @@ Write any operating-specific tests in a file for that operating system, e.g. `os
 
 ### 🧹🕸 Linting
 
-Use `goimports` for formatting and linting.
+Use [goimports](https://pkg.go.dev/golang.org/x/tools/cmd/goimports) for formatting and linting, and [gci](https://github.com/daixiang0/gci) for import order.
 
 Install it:
 
     go install golang.org/x/tools/cmd/goimports@latest
+    go install github.com/daixiang0/gci@latest
 
 Run it:
 
-    goimports -w .
-
+    goimports -w . && gci write .
 
 ## 🚀 Releasing
 
