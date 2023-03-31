@@ -2,10 +2,9 @@ package utils
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
-
-	"errors"
 
 	"github.com/techygrrrl/timerrr/models"
 )
