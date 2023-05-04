@@ -20,7 +20,7 @@ var (
 	focusedStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("#FFFFFF")).Bold(true)
 	focusedPromptStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#EF15BF")).Bold(true)
 	blurredButtonStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#15AEEF"))
-	cursorStyle        = focusedStyle.Copy()
+	cursorStyle        = lipgloss.NewStyle().Foreground(lipgloss.Color("#EF15BF"))
 	defaultStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("#FFFFFF"))
 	placeholderStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("#D5D2DC"))
 
