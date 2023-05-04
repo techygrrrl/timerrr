@@ -171,7 +171,7 @@ func createAddModel() AddModel {
 	var input textinput.Model
 	for i := range model.inputs {
 		input = textinput.New()
-		input.CursorStyle = cursorStyle
+		input.Cursor.Style = cursorStyle
 
 		switch i {
 		case 0:
