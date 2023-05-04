@@ -17,10 +17,12 @@ import (
 )
 
 var (
-	focusedStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("#EF15BF"))
+	focusedStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("#FFFFFF")).Bold(true)
+	focusedPromptStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#EF15BF")).Bold(true)
 	blurredButtonStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#15AEEF"))
 	cursorStyle        = focusedStyle.Copy()
 	defaultStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("#FFFFFF"))
+	placeholderStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("#D5D2DC"))
 
 	focusedButton = focusedStyle.Copy().Render("[ Submit ]")
 	blurredButton = fmt.Sprintf("[ %s ]", blurredButtonStyle.Render("Submit"))
@@ -106,7 +108,7 @@ func (m AddModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				if i == m.focusIndex {
 					// Set focused state
 					cmds[i] = m.inputs[i].Focus()
-					m.inputs[i].PromptStyle = focusedStyle
+					m.inputs[i].PromptStyle = focusedPromptStyle
 					m.inputs[i].TextStyle = focusedStyle
 					continue
 				}
@@ -172,12 +174,13 @@ func createAddModel() AddModel {
 	for i := range model.inputs {
 		input = textinput.New()
 		input.Cursor.Style = cursorStyle
+		input.PlaceholderStyle = placeholderStyle
 
 		switch i {
 		case 0:
 			input.Placeholder = "Timer name"
 			input.Focus()
-			input.PromptStyle = focusedStyle
+			input.PromptStyle = focusedPromptStyle
 			input.TextStyle = focusedStyle
 			input.CharLimit = 30
 
