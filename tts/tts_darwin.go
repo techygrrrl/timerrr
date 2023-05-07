@@ -1,12 +1,9 @@
 package tts
 
-
 import (
-    "math/rand"
-    "os/exec"
+	"math/rand"
+	"os/exec"
 )
-
-
 
 func TtsCommand(message string) *(exec.Cmd) {
 	voices := []string{"daniel", "samantha", "rishi", "veena", "moira", "fiona", "tessa"}
